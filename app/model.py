@@ -27,3 +27,13 @@ class WritingSystem(db.Model):  # type: ignore
         return {
             'name': self.name
         }
+
+
+class MorphosyntacticAlignment(db.Model):  # type: ignore
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(_TEXT_SIZE_MIN), unique=True)
+
+    def serialize(self) -> JSONLike:
+        return {
+            'name': self.name
+        }
