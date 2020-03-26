@@ -11,11 +11,12 @@ db = SQLAlchemy()
 language_categories = db.Table(
     'language_categories',
     db.Column('language_id', db.Integer(), db.ForeignKey('languages.id')),
-    db.Column('category_id', db.Integer(), db.ForeignKey('categories.id'))
+    db.Column('category_id', db.Integer(), db.ForeignKey('ct_ranges.id'))
 )
 
 
 class CategoriesRange(db.Model):  # type: ignore
+    __tablename__ = 'ct_ranges'
     id = db.Column(db.Integer(), primary_key=True)
     min_value = db.Column(db.Integer())
     max_value = db.Column(db.Integer())
@@ -28,6 +29,7 @@ class CategoriesRange(db.Model):  # type: ignore
 
 
 class Language(db.Model):  # type: ignore
+    __tablename__ = 'languages'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(_TEXT_SIZE_MIN), unique=True)
     has_articles = db.Column(db.Boolean(), default=False)
