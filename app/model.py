@@ -37,3 +37,15 @@ class MorphosyntacticAlignment(db.Model):  # type: ignore
         return {
             'name': self.name
         }
+
+
+class CategoriesRange(db.Model):  # type: ignore
+    id = db.Column(db.Integer(), primary_key=True)
+    min_value = db.Column(db.Integer())
+    max_value = db.Column(db.Integer())
+
+    def serialize(self) -> JSONLike:
+        return {
+            'min': self.min_value,
+            'max': self.max_value
+        }
