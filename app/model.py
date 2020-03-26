@@ -2,11 +2,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 from .constants import (
     JSONLike,
-    _TEXT_SIZE_MAX,
     _TEXT_SIZE_MIN,
 )
 
 db = SQLAlchemy()
+
+
+language_categories = db.Table(
+    'language_categories',
+    db.Column('language_id', db.Integer(), db.ForeignKey('languages.id')),
+    db.Column('category_id', db.Integer(), db.ForeignKey('categories.id'))
+)
 
 
 class CategoriesRange(db.Model):  # type: ignore
