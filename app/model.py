@@ -33,6 +33,11 @@ class Language(db.Model):  # type: ignore
 
     def serialize(self) -> JSONLike:
         return {
-            'min': self.min_value,
-            'max': self.max_value
+            'name': self.name,
+            'has_articles': self.has_articles,
+            'mrph_alignment': self.mrph_alignment,
+            'dominant_order': self.dominant_order,
+            'writing_system': self.writing_system,
+            'genders': self.genders,
+            'cases': self.cases
         }
