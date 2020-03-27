@@ -4,7 +4,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app
-from app.model import db, CategoriesRange
+from app.model import db
 
 app = create_app(os.getenv('CONFIG') or 'default')
 manager = Manager(app)
@@ -14,17 +14,13 @@ manager.add_command(
     'shell',
     Shell(make_context=lambda: {
         'app': app,
-        'db': db,
-        'CategoriesRange': CategoriesRange,
-        # 'dbrun': dbrun
+        'db': db
     })
 )
 
 
 def main() -> None:
     manager.run()
-
-    # db.session.add_all(cs)
 
 
 if __name__ == '__main__':

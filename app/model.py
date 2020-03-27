@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .constants import (
     JSONLike,
     _TEXT_SIZE_MIN,
+    _TEXT_SIZE_MAX
 )
 
 db = SQLAlchemy()
@@ -29,6 +30,7 @@ class CategoriesRange(db.Model):  # type: ignore
 class Language(db.Model):  # type: ignore
     __tablename__ = 'languages'
     id = db.Column(db.Integer(), primary_key=True)
+    origin = db.Column(db.String(_TEXT_SIZE_MAX))
     name = db.Column(db.String(_TEXT_SIZE_MIN), unique=True)
     has_articles = db.Column(db.Boolean(), default=False)
     mrph_alignment = db.Column(db.String(_TEXT_SIZE_MIN))
