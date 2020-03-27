@@ -20,6 +20,11 @@ class CategoriesRange(db.Model):  # type: ignore
     id = db.Column(db.Integer(), primary_key=True)
     min_value = db.Column(db.Integer())
     max_value = db.Column(db.Integer())
+    langs = db.relationship(
+        'Language',
+        backref='ct_range',
+        lazy='dynamic'
+    )
 
     def serialize(self) -> JSONLike:
         return {
@@ -38,6 +43,7 @@ class Language(db.Model):  # type: ignore
     writing_system = db.Column(db.String(_TEXT_SIZE_MIN))
     genders = db.Column(db.Integer())
     cases = db.Column(db.Integer())
+    ct_range_id = db.Column(db.Integer(), db.ForeignKey('ct_ranges.id'))
 
     def serialize(self) -> JSONLike:
         return {
