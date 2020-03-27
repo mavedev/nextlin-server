@@ -2,6 +2,7 @@ from typing import Dict, Any
 
 # Types.
 JSONLike = Dict[str, Any]
+JSON = Dict[str, str]
 
 _TEXT_SIZE_MAX: int = 255
 _TEXT_SIZE_MID: int = 150

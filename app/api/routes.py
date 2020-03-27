@@ -1,6 +1,7 @@
-from flask import jsonify
+from flask import jsonify, request
 
 from . import api
+from . import logic
 from ..model import db, Language
 
 
@@ -10,3 +11,9 @@ def get_posts(how_many: int) -> str:
         lang.to_json() for lang in
         db.session.query(Language).limit(how_many).all()
     ])
+
+
+@api.route('/langs/analyse', methods=['POST'])
+def get_index() -> str:
+    logic.get_index(request.json)
+    return jsonify({})
