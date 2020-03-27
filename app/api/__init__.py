@@ -2,4 +2,4 @@ from flask import Blueprint
 
 api = Blueprint('api', __name__)
 
-from . import languages  # noqa: 402
+from . import routes  # noqa: 402
