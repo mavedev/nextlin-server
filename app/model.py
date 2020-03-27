@@ -8,13 +8,6 @@ from .constants import (
 db = SQLAlchemy()
 
 
-language_categories = db.Table(
-    'language_categories',
-    db.Column('language_id', db.Integer(), db.ForeignKey('languages.id')),
-    db.Column('category_id', db.Integer(), db.ForeignKey('ct_ranges.id'))
-)
-
-
 class CategoriesRange(db.Model):  # type: ignore
     __tablename__ = 'ct_ranges'
     id = db.Column(db.Integer(), primary_key=True)
