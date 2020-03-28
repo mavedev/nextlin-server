@@ -40,15 +40,16 @@ class LangLevelInfo:
 
 def get_index(request: JSON) -> int:
     """Get the index value."""
-    scale = _get_scale(request)
-    match = _get_match(request)
+    target_lang = _get_lang_from_db(request['target_lang'])
+
+    scale = _get_scale(request, target_lang)
+    match = _get_match(request, target_lang)
     index = _get_index(scale, match)
     return index
 
 
-def _get_scale(request: JSON) -> float:
+def _get_scale(request: JSON, target_lang: Language) -> float:
     """Get a scale coefficient."""
-    target_lang = _get_lang_from_db(request['target_lang'])
     given_langs = _get_given_langs_info(request)
     langs_infos = _get_wrapped_langs_info(given_langs)
     close_langs = _get_close_langs(langs_infos, target_lang)
@@ -60,8 +61,18 @@ def _get_scale(request: JSON) -> float:
     )[0].scale
 
 
-def _get_match(request: JSON) -> Dict[str, bool]:
-    ...
+def _get_match(request: JSON, target_lang: Language) -> Dict[str, bool]:
+    native = _get_lang_from_db(request['native'])
+    return {
+        'origin': target_lang.origin == native.origin,
+        'has_articles': target_lang.has_articles == native.has_articles,
+        'mrph_alignment': target_lang.mrph_alignment == native.mrph_alignment,
+        'dominant_order': target_lang.dominant_order == native.dominant_order,
+        'writing_system': target_lang.writing_system == native.writing_system,
+        'genders': target_lang.genders == native.genders,
+        'cases': target_lang.cases == native.cases,
+        'ct_range': target_lang.ct_range == native.ct_range
+    }
 
 
 def _get_index(scale: float, match: Dict[str, bool]) -> int:
