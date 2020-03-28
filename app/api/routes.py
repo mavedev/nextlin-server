@@ -15,5 +15,7 @@ def get_posts(how_many: int) -> str:
 
 @api.route('/langs/analyse', methods=['POST'])
 def get_index() -> str:
-    logic.get_index(request.json)
-    return jsonify({})
+    index = '{}%'.format(logic.get_index(request.json))
+    return jsonify({
+        'success_index': index
+    })

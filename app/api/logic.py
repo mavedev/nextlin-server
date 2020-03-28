@@ -43,7 +43,9 @@ def get_index(request: JSON) -> int:
     target_lang = _get_lang_from_db(request['target_lang'])
 
     scale = _get_scale(request, target_lang)
+    print('Scale', scale)
     match = _get_match(request, target_lang)
+    print('Mathc', match)
     index = _get_index(scale, match)
     return index
 
@@ -76,7 +78,12 @@ def _get_match(request: JSON, target_lang: Language) -> Dict[str, bool]:
 
 
 def _get_index(scale: float, match: Dict[str, bool]) -> int:
-    ...
+    params: int = len(match)
+    price: float = 100 / params
+    weighted_price: float = price + price * scale
+    return round(sum([
+        weighted_price for param_match in match.values() if param_match
+    ])) if any(match.values()) else 0
 
 
 def _get_lang_from_db(lang_name: str) -> Optional[Language]:
