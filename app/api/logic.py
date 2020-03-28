@@ -63,17 +63,20 @@ def _get_scale(request: JSON, target_lang: Language) -> float:
     )[0].scale
 
 
-def _get_match(request: JSON, target_lang: Language) -> Dict[str, bool]:
+def _get_match(request: JSON, target: Language) -> Dict[str, bool]:
     native = _get_lang_from_db(request['native'])
+    n_family, n_group = Language.get_split_origin(native.origin)
+    t_family, t_group = Language.get_split_origin(target.origin)
     return {
-        'origin': target_lang.origin == native.origin,
-        'has_articles': target_lang.has_articles == native.has_articles,
-        'mrph_alignment': target_lang.mrph_alignment == native.mrph_alignment,
-        'dominant_order': target_lang.dominant_order == native.dominant_order,
-        'writing_system': target_lang.writing_system == native.writing_system,
-        'genders': target_lang.genders == native.genders,
-        'cases': target_lang.cases == native.cases,
-        'ct_range': target_lang.ct_range == native.ct_range
+        'family': t_family == n_family,
+        'group': t_group == n_group,
+        'has_articles': target.has_articles == native.has_articles,
+        'mrph_alignment': target.mrph_alignment == native.mrph_alignment,
+        'dominant_order': target.dominant_order == native.dominant_order,
+        'writing_system': target.writing_system == native.writing_system,
+        'genders': target.genders == native.genders,
+        'cases': target.cases == native.cases,
+        'ct_range': target.ct_range == native.ct_range
     }
 
 
