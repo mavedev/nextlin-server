@@ -1,3 +1,6 @@
+from typing import Tuple
+from re import compile
+
 from flask_sqlalchemy import SQLAlchemy
 
 from .constants import (
@@ -7,6 +10,7 @@ from .constants import (
 )
 
 db = SQLAlchemy()
+originreg = compile(r'^[\w]+ [\w]+$')
 
 
 class CategoriesRange(db.Model):  # type: ignore
@@ -50,3 +54,9 @@ class Language(db.Model):  # type: ignore
             'genders': self.genders,
             'cases': self.cases
         }
+
+    @staticmethod
+    def get_split_origin(origin: str) -> Tuple[str, ...]:
+        if origin is None or not originreg.match(origin):
+            ValueError('Invalid origin value.')
+        return tuple(origin.split())
