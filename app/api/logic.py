@@ -43,10 +43,9 @@ def get_index(request: JSON) -> int:
     target_lang = _get_lang_from_db(request['target_lang'])
 
     scale = _get_scale(request, target_lang)
-    print('Scale', scale)
     match = _get_match(request, target_lang)
-    print('Mathc', match)
     index = _get_index(scale, match)
+
     return index
 
 
@@ -64,6 +63,7 @@ def _get_scale(request: JSON, target_lang: Language) -> float:
 
 
 def _get_match(request: JSON, target: Language) -> Dict[str, bool]:
+    """Get matches of all of the comparing languages' parameters."""
     native = _get_lang_from_db(request['native'])
     n_family, n_group = Language.get_split_origin(native.origin)
     t_family, t_group = Language.get_split_origin(target.origin)
@@ -81,6 +81,7 @@ def _get_match(request: JSON, target: Language) -> Dict[str, bool]:
 
 
 def _get_index(scale: float, match: Dict[str, bool]) -> int:
+    """Get the succes index for given dictionary of matches."""
     params: int = len(match)
     price: float = 100 / params
     weighted_price: float = price + price * scale
