@@ -38,6 +38,13 @@ class LangLevelInfo:
         return self._scale
 
 
+def get_available_langs_names() -> List[str]:
+    return [
+        lang.name for lang in
+        db.session.query(Language).all()
+    ]
+
+
 def get_index(request: JSON) -> int:
     """Get the index value."""
     target_lang = _get_lang_from_db(request['target_lang'])

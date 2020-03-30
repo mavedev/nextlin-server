@@ -2,15 +2,11 @@ from flask import jsonify, request
 
 from . import api
 from . import logic
-from ..model import db, Language
 
 
-@api.route('/langs/<int:how_many>')
-def get_posts(how_many: int) -> str:
-    return jsonify(results=[
-        lang.serialize() for lang in
-        db.session.query(Language).limit(how_many).all()
-    ])
+@api.route('/langs/available', methods=['GET'])
+def get_available_langs_names() -> str:
+    return jsonify(results=logic.get_available_langs_names())
 
 
 @api.route('/langs/analyse', methods=['POST'])
