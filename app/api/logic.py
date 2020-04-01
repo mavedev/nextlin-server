@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple, Optional
 
-from app.constants import JSON
+from app.constants import JSONLike
 from app.model import db, Language
 
 _LangData = List[Tuple[str, str]]
@@ -45,7 +45,7 @@ def get_available_langs_names() -> List[str]:
     ]
 
 
-def get_index(request: JSON) -> int:
+def get_index(request: JSONLike) -> int:
     """Get the index value."""
     target_lang = _get_lang_from_db(request['target_lang'])
 
@@ -56,7 +56,7 @@ def get_index(request: JSON) -> int:
     return index
 
 
-def _get_scale(request: JSON, target_lang: Language) -> float:
+def _get_scale(request: JSONLike, target_lang: Language) -> float:
     """Get a scale coefficient."""
     given_langs = _get_given_langs_info(request)
     langs_infos = _get_wrapped_langs_info(given_langs)
@@ -69,7 +69,7 @@ def _get_scale(request: JSON, target_lang: Language) -> float:
     )[0].scale
 
 
-def _get_match(request: JSON, target: Language) -> Dict[str, bool]:
+def _get_match(request: JSONLike, target: Language) -> Dict[str, bool]:
     """Get matches of all of the comparing languages' parameters."""
     native = _get_lang_from_db(request['native'])
     n_family, n_group = Language.get_split_origin(native.origin)
@@ -106,7 +106,7 @@ def _get_lang_from_db(lang_name: str) -> Optional[Language]:
     )
 
 
-def _get_given_langs_info(request: JSON) -> _LangData:
+def _get_given_langs_info(request: JSONLike) -> _LangData:
     """Get Tuples containing languages names and levels
        (according to the request).
     """
