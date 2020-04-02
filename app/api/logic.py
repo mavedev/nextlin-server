@@ -80,7 +80,18 @@ def _get_scale(request: JSONLike, target_lang: Language) -> float:
     )[0].scale
 
 
-def _get_match_(known: Language, level: str, target: Language) -> float:
+def _get_resulting_similarity(request: JSONLike, target: Language) -> float:
+    known_langs: JSONLike = request['known_langs']
+    results: List[float] = []
+    for lang, level in known_langs.items():
+        dblang: Language = _get_lang_from_db(lang)
+        if not dblang:
+            continue
+        results.append(_get_similarity(dblang, level, target))
+    return max(results) if results else 0
+
+
+def _get_similarity(known: Language, level: str, target: Language) -> float:
     t_family, t_group = Language.get_split_origin(target.origin)
     results: List[float] = []
     for criteria, weight in _criteria_weights.items():
