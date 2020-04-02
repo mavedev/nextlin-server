@@ -39,7 +39,9 @@ def get_index(request: JSONLike) -> int:
     if _contains_target(known_langs, target_lang):
         return 100
 
-    return round(_get_resulted_similarity(known_langs, target_lang))
+    return round(
+        _get_resulted_similarity(known_langs, target_lang) * 100
+    )
 
 
 def _get_resulted_similarity(known_langs, target):
@@ -47,8 +49,9 @@ def _get_resulted_similarity(known_langs, target):
     # type: (List[JSONLike], Language) -> float
     results: List[float] = []
     langs_infos = [
-        (langinfo['lang'], langinfo['level'])
+        (lang, level)
         for langinfo in known_langs
+        for lang, level in langinfo.items()
     ]
     for lang, level in langs_infos:
         dblang: Language = _get_lang_from_db(lang)
@@ -59,14 +62,14 @@ def _get_resulted_similarity(known_langs, target):
 
 
 def _get_similarity(known: Language, level: str, target: Language) -> float:
-    t_family, t_group = Language.get_split_origin(target.origin)
     results: List[float] = []
     for criteria, weight in _criteria_weights.items():
         results.append(
             int(getattr(known, criteria) == getattr(target, criteria))
             * weight
-            * (_levels.get(level) or 0)
+            * (_levels.get(level.lower()) or 0)
         )
+    print(results, level, known.name)
     return sum(results)
 
 
@@ -81,8 +84,8 @@ def _get_lang_from_db(lang_name: str) -> Optional[Language]:
 
 def _contains_target(contains_where: JSONLike, target: Language) -> bool:
     for langinfo in contains_where:
-        lang, _ = langinfo
-        if lang == target.name:
+        # Technically, proper langinfo always has one key-value pair.
+        if target.name in langinfo:
             return True
     else:
         return False
