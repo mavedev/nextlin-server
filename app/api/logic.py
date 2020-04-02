@@ -91,9 +91,10 @@ def _get_index(scale: float, match: Dict[str, bool]) -> int:
     """Get the succes index for given dictionary of matches."""
     params: int = len(match)
     price: float = 100 / params
-    weighted_price: float = price + price * scale
+    weighted_price: float = price * scale
     return round(sum([
-        weighted_price for param_match in match.values() if param_match
+        weighted_price * param_match
+        for param_match in match.values() if param_match
     ])) if any(match.values()) else 0
 
 
@@ -110,11 +111,13 @@ def _get_given_langs_info(request: JSONLike) -> _LangData:
     """Get Tuples containing languages names and levels
        (according to the request).
     """
-    return [
+    result = [
         (lang, level)
         for langinfo in request['known_langs']
         for lang, level in langinfo.items()  # type: ignore
     ]
+    result.append((request['native'], 'native'))
+    return result
 
 
 def _get_wrapped_langs_info(given_langs: _LangData) -> List[LangLevelInfo]:
