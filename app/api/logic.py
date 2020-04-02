@@ -13,6 +13,17 @@ _levels = {
     'master': 0.8,
     'native': 1.0,
 }
+_criteria_weights = {
+    'family': 0.2,
+    'group': 0.3,
+    'has_articles': 0.05,
+    'mrph_alignment': 0.07,
+    'dominant_order': 0.05,
+    'writing_system': 0.15,
+    'genders': 0.1,
+    'cases': 0.05,
+    'ct_range': 0.03,
+}
 
 
 class LangLevelInfo:
