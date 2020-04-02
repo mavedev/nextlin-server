@@ -36,15 +36,21 @@ def get_index(request: JSONLike) -> int:
     target_lang = _get_lang_from_db(request['target_lang'])
     known_langs = request['known_langs']
 
-    if target_lang in known_langs:
+    if _contains_target(known_langs, target_lang):
         return 100
 
     return round(_get_resulted_similarity(known_langs, target_lang))
 
 
-def _get_resulted_similarity(known_langs: JSONLike, target: Language) -> float:
+def _get_resulted_similarity(known_langs, target):
+    # Comment-like type annotation to avoid max line lenth warning.
+    # type: (List[JSONLike], Language) -> float
     results: List[float] = []
-    for lang, level in known_langs.items():
+    langs_infos = [
+        (langinfo['lang'], langinfo['level'])
+        for langinfo in known_langs
+    ]
+    for lang, level in langs_infos:
         dblang: Language = _get_lang_from_db(lang)
         if not dblang:
             continue
@@ -71,3 +77,12 @@ def _get_lang_from_db(lang_name: str) -> Optional[Language]:
         .filter(Language.name == lang_name)
         .first()
     )
+
+
+def _contains_target(contains_where: JSONLike, target: Language) -> bool:
+    for langinfo in contains_where:
+        lang, _ = langinfo
+        if lang == target.name:
+            return True
+    else:
+        return False
