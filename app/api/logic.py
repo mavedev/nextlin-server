@@ -80,6 +80,18 @@ def _get_scale(request: JSONLike, target_lang: Language) -> float:
     )[0].scale
 
 
+def _get_match_(known: Language, level: str, target: Language) -> float:
+    t_family, t_group = Language.get_split_origin(target.origin)
+    results: List[float] = []
+    for criteria, weight in _criteria_weights.items():
+        results.append(
+            int(getattr(known, criteria) == getattr(target, criteria))
+            * weight
+            * (_levels.get(level) or 0)
+        )
+    return sum(results)
+
+
 def _get_match(request: JSONLike, target: Language) -> Dict[str, bool]:
     """Get matches of all of the comparing languages' parameters."""
     native = _get_lang_from_db(request['native'])
