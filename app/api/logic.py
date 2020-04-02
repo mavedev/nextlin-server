@@ -36,6 +36,9 @@ def get_index(request: JSONLike) -> int:
     target_lang = _get_lang_from_db(request['target_lang'])
     known_langs = request['known_langs']
 
+    if target_lang in known_langs:
+        return 100
+
     return round(_get_resulted_similarity(known_langs, target_lang))
 
 
