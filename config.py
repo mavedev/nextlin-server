@@ -3,7 +3,7 @@ import os
 
 
 class Config:
-    SECRET_KEY: str = os.getenv('SECRET_KEY') or 'default'
+    SECRET_KEY: str = os.getenv('SECRET_KEY') or os.urandom(24).hex()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CORS_HEADERS = 'Content-Type'
 
@@ -30,7 +30,7 @@ class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = (
         os.getenv('DB_URL_PROD')
-        or 'postgresql+psycopg2://postgres:{password}@localhost/nextlin_test'
+        or 'postgresql+psycopg2://postgres:{password}@localhost/nextlin'
         .format(password=os.getenv('DB_PASS_PROD') or '')
     )
 

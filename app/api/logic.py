@@ -69,7 +69,6 @@ def _get_similarity(known: Language, level: str, target: Language) -> float:
             * weight
             * (_levels.get(level.lower()) or 0)
         )
-    print(results, level, known.name)
     return sum(results)
 
 
