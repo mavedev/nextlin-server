@@ -1,7 +1,7 @@
 import random
 import string
 
-from app.model import Language
+from app.model import Language, CategoriesRange
 
 
 def get_random_string() -> str:
@@ -38,3 +38,15 @@ def test_new_language() -> None:
     assert lang.writing_system == writing_system
     assert lang.genders == genders
     assert lang.cases == cases
+
+
+def test_new_ct_range() -> None:
+    min_value = random.randint(0, 10)
+    max_value = random.randint(0, 10)
+
+    ct_range = CategoriesRange(
+        min_value=min_value,
+        max_value=max_value
+    )
+    assert ct_range.min_value == min_value
+    assert ct_range.max_value == max_value
