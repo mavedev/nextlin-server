@@ -1,13 +1,8 @@
 import random
-import string
 
 from app.model import Language, CategoriesRange
 
-
-def get_random_string() -> str:
-    return ''.join(
-        random.choices(string.ascii_uppercase, k=10)
-    )
+from . import get_random_string
 
 
 def test_new_language() -> None:
